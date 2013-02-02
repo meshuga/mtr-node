@@ -14,7 +14,7 @@ body {
     float: left;
 }
 .alert {
-    #height: 25px!important;
+    height: 25px!important;
 }
 
 .form-actions {

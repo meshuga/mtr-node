@@ -10,7 +10,7 @@ $(document).ready(function() {
     results[newIndex] = newData;
 
     var indexes = Object.keys(results).sort(function(a,b){return a-b});
-    var trs = '<tr><th>ID</th><th>Host</th><th>Loss</th><th>Received</th><th>Sent</th><th>Xmit</th><th>AVG</th><th>Wrst</th></tr>';
+    var trs = '';//''<tr><th>ID</th><th>Host</th><th>Loss</th><th>Received</th><th>Sent</th><th>Xmit</th><th>AVG</th><th>Wrst</th></tr>';
     var trElements = $('tr');
     var tds = '';
     var lossLvl = 0;
@@ -41,7 +41,7 @@ $(document).ready(function() {
         trs += '<tr id="row-'+index+'"'+lossInfo+'>'+tds+'</tr>';
 
       }
-      $('th, td, tr').remove();
+      $('tr:has(td)').remove();
       $('table.mtr-results').append(trs);
     }else{
       for(j=0;j<8;j++){
@@ -86,8 +86,9 @@ $(document).ready(function() {
 
   function sendRequest(){
     socket.emit('mtr', { address: $('#address').val() });
-    $('tr').remove();
+    $('tr:has(td)').remove();
     $("button.kill-mtr").removeAttr("disabled");
+    results = {};
     return false;
   }
 
