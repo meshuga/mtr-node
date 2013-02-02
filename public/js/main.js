@@ -22,11 +22,13 @@ $(document).ready(function() {
         var row = results[index];
         tds = '';
         for(j=0;j<8;j++){
-          if(j!=2){
+          if(j==1){
+            tds+='<td><a href="http://www.ip-adress.com/whois/'+row[1]+'" target="_blank">'+row[1]+'</a></td>';
+          }else if(j!=2){
             tds+='<td>'+row[j]+'</td>'
           }else{
             lossLvl = (new Number(100 - 100 * (+row[3]) / (+row[4]))).toPrecision(5);
-            tds+='<td>'+ lossLvl +'</td>'
+            tds+='<td>'+ lossLvl +'%</td>'
           }
         }
         if(lossLvl > 75){
@@ -43,11 +45,13 @@ $(document).ready(function() {
       $('table.mtr-results').append(trs);
     }else{
       for(j=0;j<8;j++){
-        if(j!=2){
+        if(j==1){
+          tds+='<td><a href="http://www.ip-adress.com/whois/'+newData[1]+'" target="_blank">'+newData[1]+'</a></td>';
+        }else if(j!=2){
           tds+='<td>'+newData[j]+'</td>';
         }else{
           lossLvl = (new Number(100 - 100 * (+newData[3])/(+newData[4]))).toPrecision(5);
-          tds+='<td>'+ lossLvl +'</td>'
+          tds+='<td>'+ lossLvl +'%</td>'
         }
       }
       if(lossLvl > 75){
@@ -64,8 +68,10 @@ $(document).ready(function() {
   socket.on('got', function (data) {
     if(data.cmd == 'nok'){
       newAlert('error', data.data);
+      $("button.kill-mtr").attr("disabled", "disabled");
     }
     else if(data.cmd == 'ok'){
+      $(".alert").remove();
       newAlert('success', data.data);
     }
   });
@@ -80,7 +86,8 @@ $(document).ready(function() {
 
   function sendRequest(){
     socket.emit('mtr', { address: $('#address').val() });
-    $('td').remove();
+    $('tr').remove();
+    $("button.kill-mtr").removeAttr("disabled");
     return false;
   }
 

@@ -1,1 +1,2 @@
-This file was created by JetBrains RubyMine 4.5.4 for binding GitHub repository
+A simple service which uses Node.js, Express, CoffeeScript and Socket.IO to provide a web interface for MTR tool.
+Currently works only under Linux.
