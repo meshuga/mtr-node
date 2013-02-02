@@ -9,6 +9,7 @@ $(document).ready(function() {
     var newData = data.data,j;
     var newIndex = newData[0];
     results[newIndex] = newData;
+    $("button.kill-mtr").removeAttr("disabled");
 
     var indexes = Object.keys(results).sort(function(a,b){return a-b});
     var trs = '';
@@ -100,7 +101,6 @@ $(document).ready(function() {
   function sendRequest(){
     socket.emit('mtr', { address: $('#address').val() });
     $('tr:has(td)').remove();
-    $("button.kill-mtr").removeAttr("disabled");
     results = {};
     return false;
   }

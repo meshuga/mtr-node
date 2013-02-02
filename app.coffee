@@ -39,6 +39,7 @@ io.sockets.on('connection', (socket) ->
   # Kill MTR
   socket.on('kill-mtr', (data) ->
     mtrProcess.kill() if mtrProcess?
+    socket.emit('got', {cmd: 'nok', data: 'MTR killed'})
   )
 
   # Create new MTR process and bind process events to socket
@@ -60,7 +61,7 @@ server.listen(app.get('port'), ->
   console.log("Express server listening on port " + app.get('port'))
 )
 
-# Binds MTR events (data on stderr, stdout and process exited) to a socket
+# Binds MTR events (data on stderr and stdout) to a socket
 getResponses = (socket, address, mtrProcess)->
   mtrProcess.stderr.on('data', (data) ->
     socket.emit('got', {cmd: 'nok', data: data.toString()})
@@ -72,7 +73,4 @@ getResponses = (socket, address, mtrProcess)->
       if(line == '') then break
       line = line.split(' ')
       socket.emit('update', {data: line})
-  )
-  mtrProcess.on('exit', ->
-    socket.emit('got', {cmd: 'nok', data: 'MTR was killed'})
   )
