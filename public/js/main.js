@@ -1,16 +1,17 @@
 "use strict";
 
 $(document).ready(function() {
-  var socket = io.connect('http://localhost');
+  var socket = io.connect();
   var results = {};
 
+  // function fired on update from server
   socket.on('update', function (data) {
     var newData = data.data,j;
     var newIndex = newData[0];
     results[newIndex] = newData;
 
     var indexes = Object.keys(results).sort(function(a,b){return a-b});
-    var trs = '';//''<tr><th>ID</th><th>Host</th><th>Loss</th><th>Received</th><th>Sent</th><th>Xmit</th><th>AVG</th><th>Wrst</th></tr>';
+    var trs = '';
     var trElements = $('tr:has(td)');
     var tds = '';
     var lossLvl = 0;
@@ -31,9 +32,9 @@ $(document).ready(function() {
             tds+='<td>'+ lossLvl +'%</td>'
           }
         }
-        if(lossLvl > 75){
+        if(lossLvl > 80){
           lossInfo = ' class="error"';
-        }else if(lossLvl > 50){
+        }else if(lossLvl > 40){
           lossInfo = ' class="warning"';
         }else{
           lossInfo = ' class="success"';
@@ -54,9 +55,9 @@ $(document).ready(function() {
           tds+='<td>'+ lossLvl +'%</td>'
         }
       }
-      if(lossLvl > 75){
+      if(lossLvl > 80){
         lossInfo = 'error';
-      }else if(lossLvl > 50){
+      }else if(lossLvl > 40){
         lossInfo = 'warning';
       }else{
         lossInfo = 'success';
@@ -64,10 +65,14 @@ $(document).ready(function() {
       $('tr#row-'+newIndex).html(tds).attr('class', lossInfo);
     }
   });
+
+  // Show proper error in case of server error
   socket.on('disconnect', function(){
-    newAlert('error', 'server disconnected');
+    newAlert('error', 'server error');
     $("button.kill-mtr").attr("disabled", "disabled");
   });
+
+  // Show proper information from server
   socket.on('got', function (data) {
     if(data.cmd == 'nok'){
       newAlert('error', data.data);
@@ -79,14 +84,19 @@ $(document).ready(function() {
     }
   });
 
+  // Bind form events to function
   $('.mtr-send').submit(sendRequest);
-
   $('.send-btn').click(sendRequest);
 
+  // Bind button to kill MTR event
   $('.kill-mtr').click(function(){
     socket.emit('kill-mtr');
   });
 
+  /**
+   * Sends new request to lookup a host
+   * @return {Boolean} always false
+   */
   function sendRequest(){
     socket.emit('mtr', { address: $('#address').val() });
     $('tr:has(td)').remove();
@@ -95,9 +105,13 @@ $(document).ready(function() {
     return false;
   }
 
+  /**
+   *
+   * @param type - can be: success, error, warning, info
+   * @param message
+   */
   function newAlert (type, message) {
-    $("#alert-area").append($("<div class='alert alert-"+type+" alert-message fade in' data-alert='alert'><p> " + message + " </p></div>"));
+    $("#alert-area").append($("<div class='alert alert-"+type+" alert-message' data-alert='alert'><p> " + message + " </p></div>"));
     $(".alert-message").delay(3000).fadeOut("slow", function () { $(this).remove(); });
   }
-
 });

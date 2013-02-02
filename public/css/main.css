@@ -13,12 +13,9 @@ body {
     height: 50px;
     float: left;
 }
-.alert {
-    height: 25px!important;
-}
 
 .form-actions {
-    padding: 0 0 0 340px;
+    padding: 0 0 0 10px;
     background-color: #FFFFFF;
     border: 0;
 }
@@ -27,6 +24,7 @@ body {
     margin: 5px;
     width: 120px;
     height: 35px;
+    float: right;
 }
 
 .mtr-send {
@@ -42,14 +40,7 @@ body {
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
     box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
-.mtr-send .form-signin-heading,
-.mtr-send .checkbox {
-    margin-bottom: 10px;
-}
-.mtr-send input[type="text"],
-.mtr-send input[type="password"] {
-    font-size: 16px;
-    height: auto;
-    margin-bottom: 15px;
-    padding: 7px 9px;
+
+footer {
+    text-align: center;
 }
