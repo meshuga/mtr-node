@@ -11,12 +11,12 @@ $(document).ready(function() {
 
     var indexes = Object.keys(results).sort(function(a,b){return a-b});
     var trs = '';//''<tr><th>ID</th><th>Host</th><th>Loss</th><th>Received</th><th>Sent</th><th>Xmit</th><th>AVG</th><th>Wrst</th></tr>';
-    var trElements = $('tr');
+    var trElements = $('tr:has(td)');
     var tds = '';
     var lossLvl = 0;
     var lossInfo = '';
 
-    if(trElements.length-1 != indexes.length){ // New row(s);-1 because of HR tags
+    if(trElements.length != indexes.length){
       for(var i=0;i<indexes.length;i++){
         var index = indexes[i];
         var row = results[index];
@@ -64,7 +64,10 @@ $(document).ready(function() {
       $('tr#row-'+newIndex).html(tds).attr('class', lossInfo);
     }
   });
-
+  socket.on('disconnect', function(){
+    newAlert('error', 'server disconnected');
+    $("button.kill-mtr").attr("disabled", "disabled");
+  });
   socket.on('got', function (data) {
     if(data.cmd == 'nok'){
       newAlert('error', data.data);
