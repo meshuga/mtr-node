@@ -1,0 +1,13 @@
+{
+  "name": "mtr-node",
+  "version": "1.0",
+  "private": true,
+  "scripts": {
+    "start": "coffee app"
+  },
+  "dependencies": {
+    "express": "3.0.0rc4",
+    "socket.io": "*",
+    "jade": "*"
+  }
+}

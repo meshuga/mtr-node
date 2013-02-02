@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  div.hero-unit
+    div#alert-area
+    form.mtr-send
+      h2 type in address to mtr
+      input(type='text',placeholder='Address').input-block-level#address
+      div.form-actions
+        button(type='button', class='btn btn-danger kill-mtr') Kill mtr
+        button(type='button', class='btn btn-info send-btn') Send
+    table(class='table table-hover table-condensed mtr-results')
+      tr
+        th ID
+        th Host
+        th Loss
+        th Received
+        th Sent
+        th Xmit
+        th AVG
+        th Wrst
